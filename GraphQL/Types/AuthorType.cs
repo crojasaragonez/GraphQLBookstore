@@ -18,7 +18,6 @@ namespace GraphQLBookstore.GraphQL.Types
                     var loader = dataLoaderAccesor.Context.GetOrAddCollectionBatchLoader<long, Book>(
                         "GetBooksByAuthorId", bookRepository.GetForAuthor);
                     return loader.LoadAsync(context.Source.Id);
-                    //return bookRepository.GetForAuthor(context.Source.Id);
                 }
             );
         }
