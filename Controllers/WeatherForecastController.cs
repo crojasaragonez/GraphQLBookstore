@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using GraphQLBookstore.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace GraphQLBookstore.Controllers
 {
@@ -17,10 +19,16 @@ namespace GraphQLBookstore.Controllers
         };
 
         private readonly ILogger<WeatherForecastController> _logger;
+        private readonly DataBaseContext _context;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, DataBaseContext context)
         {
             _logger = logger;
+            _context = context;
+            // System.Console.WriteLine("---------------------------");
+            // System.Console.WriteLine(_context.Books.Include(b => b.Author).First().Author.Name);
+            // System.Console.WriteLine(_context.Authors.Include(b => b.Books).First().Books.First().Name);
+            // System.Console.WriteLine("---------------------------");
         }
 
         [HttpGet]

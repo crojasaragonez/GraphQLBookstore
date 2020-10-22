@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GraphQLBookstore.Models
 {
-    class DataBaseContext : DbContext
+    public class DataBaseContext : DbContext
     {
         public DataBaseContext(DbContextOptions<DataBaseContext> options) : base(options)
         {

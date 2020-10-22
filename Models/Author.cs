@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace GraphQLBookstore.Models
 {
-    class Author
+    public class Author
     {
         public long Id { get; set; }
         public string Name { get; set; }
