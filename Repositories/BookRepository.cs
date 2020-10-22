@@ -15,11 +15,6 @@ namespace GraphQLBookstore.Repositories
             _context = context;
         }
 
-        public IEnumerable<Book> GetForAuthor(long id)
-        {
-            return _context.Books.Where(b => b.AuthorId == id);
-        }
-
         public async Task<ILookup<long, Book>> GetForAuthor(IEnumerable<long> authorIds)
         {
             var books = await _context.Books.Where(b => authorIds.Contains(b.AuthorId)).ToListAsync();
