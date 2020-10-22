@@ -1,12 +1,17 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using GraphQLBookstore.Models;
 using Microsoft.EntityFrameworkCore;
+using GraphQLBookstore.Repositories;
+using GraphQL;
+using GraphQLBookstore.GraphQL;
+using GraphQL.Server;
+using GraphQL.Server.Ui.Playground;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 namespace GraphQLBookstore
 {
@@ -23,11 +28,24 @@ namespace GraphQLBookstore
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DataBaseContext>(opt => opt.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")).UseSnakeCaseNamingConvention());
+
+            services.AddScoped<AuthorRepository>();
+            services.AddScoped<BookRepository>();
+            services.AddScoped<IDependencyResolver>(s => new FuncDependencyResolver(s.GetRequiredService));
+            services.AddScoped<BookstoreSchema>();
+
+            services.AddGraphQL(o => { o.ExposeExceptions = true;})
+                    .AddGraphTypes(ServiceLifetime.Scoped);
+
             services.AddControllersWithViews();
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/dist";
+            });
+            services.Configure<KestrelServerOptions>(options =>
+            {
+                options.AllowSynchronousIO = true;
             });
         }
 
@@ -53,6 +71,11 @@ namespace GraphQLBookstore
             }
 
             app.UseRouting();
+            app.UseGraphQL<BookstoreSchema>();
+            app.UseGraphQLPlayground(new GraphQLPlaygroundOptions
+            {
+                Path = "/ui/playground"
+            });
 
             app.UseEndpoints(endpoints =>
             {

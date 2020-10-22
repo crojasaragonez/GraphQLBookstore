@@ -15,6 +15,14 @@ namespace GraphQLBookstore.GraphQL
                 ),
                 resolve: context => authorRepository.All(context)
             );
+
+            Field<AuthorType>(
+                "author",
+                arguments: new QueryArguments(new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "id", Description = "The id of the author" }),
+                resolve: context => {
+                    return authorRepository.Find(context.GetArgument<long>("id"));
+                }
+            );
         }
     }
 }

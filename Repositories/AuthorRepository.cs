@@ -22,5 +22,9 @@ namespace GraphQLBookstore.Repositories
             }
             return result;
         }
+
+        public Author Find(long id) {
+            return _context.Authors.Find(id);
+        }
     }
 }
