@@ -1,7 +1,6 @@
 using GraphQLBookstore.Models;
 using System.Collections.Generic;
 using System.Linq;
-using GraphQL.Types;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
