@@ -35,7 +35,8 @@ namespace GraphQLBookstore
             services.AddScoped<BookstoreSchema>();
 
             services.AddGraphQL(o => { o.ExposeExceptions = true;})
-                    .AddGraphTypes(ServiceLifetime.Scoped);
+                    .AddGraphTypes(ServiceLifetime.Scoped)
+                    .AddDataLoader();
 
             services.AddControllersWithViews();
             // In production, the Angular files will be served from this directory

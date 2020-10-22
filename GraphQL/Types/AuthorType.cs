@@ -1,3 +1,4 @@
+using GraphQL.DataLoader;
 using GraphQL.Types;
 using GraphQLBookstore.Models;
 using GraphQLBookstore.Repositories;
@@ -6,7 +7,7 @@ namespace GraphQLBookstore.GraphQL.Types
 {
     class AuthorType : ObjectGraphType<Author>
     {
-        public AuthorType(BookRepository bookRepository)
+        public AuthorType(BookRepository bookRepository, IDataLoaderContextAccessor dataLoaderAccesor)
         {
             Name = "Author";
             Field(x => x.Id).Description("The ID of the Author.");
@@ -14,7 +15,10 @@ namespace GraphQLBookstore.GraphQL.Types
             Field<ListGraphType<BookType>>(
                 "books",
                 resolve: context => {
-                    return bookRepository.GetForAuthor(context.Source.Id);
+                    var loader = dataLoaderAccesor.Context.GetOrAddCollectionBatchLoader<long, Book>(
+                        "GetBooksByAuthorId", bookRepository.GetForAuthor);
+                    return loader.LoadAsync(context.Source.Id);
+                    //return bookRepository.GetForAuthor(context.Source.Id);
                 }
             );
         }

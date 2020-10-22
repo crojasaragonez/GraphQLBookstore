@@ -2,6 +2,8 @@ using GraphQLBookstore.Models;
 using System.Collections.Generic;
 using System.Linq;
 using GraphQL.Types;
+using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace GraphQLBookstore.Repositories
 {
@@ -16,6 +18,12 @@ namespace GraphQLBookstore.Repositories
         public IEnumerable<Book> GetForAuthor(long id)
         {
             return _context.Books.Where(b => b.AuthorId == id);
+        }
+
+        public async Task<ILookup<long, Book>> GetForAuthor(IEnumerable<long> authorIds)
+        {
+            var books = await _context.Books.Where(b => authorIds.Contains(b.AuthorId)).ToListAsync();
+            return books.ToLookup(b => b.AuthorId);
         }
     }
 }
