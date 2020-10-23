@@ -47,5 +47,33 @@ namespace GraphQLBookstore.Repositories
             var books = await _context.Books.Where(b => authorIds.Contains(b.AuthorId)).ToListAsync();
             return books.ToLookup(b => b.AuthorId);
         }
+
+        public async Task<Book> Add(Book book) {
+            _context.Books.Add(book);
+            await _context.SaveChangesAsync();
+            return book;
+        }
+
+        public async Task<Book> Update(long id, Book book) {
+            book.Id = id;
+            var updated = (_context.Books.Update(book)).Entity;
+            if (updated == null)
+            {
+                return null;
+            }
+            await _context.SaveChangesAsync();
+            return updated;
+        }
+
+        public async Task<Book> Remove(long id) {
+            var book = await _context.Books.FindAsync(id);
+            if (book == null)
+            {
+                return null;
+            }
+            _context.Books.Remove(book);
+            await _context.SaveChangesAsync();
+            return book;
+        }
     }
 }
