@@ -33,5 +33,27 @@ namespace GraphQLBookstore.Repositories
             await _context.SaveChangesAsync();
             return author;
         }
+
+        public async Task<Author> Update(long id, Author author) {
+            author.Id = id;
+            var updated = (_context.Authors.Update(author)).Entity;
+            if (updated == null)
+            {
+                return null;
+            }
+            await _context.SaveChangesAsync();
+            return updated;
+        }
+
+        public async Task<Author> Remove(long id) {
+            var author = await _context.Authors.FindAsync(id);
+            if (author == null)
+            {
+                return null;
+            }
+            _context.Authors.Remove(author);
+            await _context.SaveChangesAsync();
+            return author;
+        }
     }
 }

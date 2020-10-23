@@ -39,7 +39,7 @@ namespace GraphQLBookstore.Migrations
                         column: x => x.author_id,
                         principalTable: "authors",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateIndex(

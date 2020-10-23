@@ -7,7 +7,6 @@ namespace GraphQLBookstore.GraphQL.Types
         public AuthorInputType()
         {
             Name = "AuthorInput";
-            Field<IdGraphType>("id");
             Field<NonNullGraphType<StringGraphType>>("name");
         }
     }
