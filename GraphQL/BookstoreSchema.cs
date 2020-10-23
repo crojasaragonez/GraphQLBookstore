@@ -8,6 +8,7 @@ namespace GraphQLBookstore.GraphQL
         public BookstoreSchema(IDependencyResolver resolver) : base(resolver)
         {
             Query = resolver.Resolve<BookstoreQuery>();
+            Mutation = resolver.Resolve<BookstoreMutation>();
         }
     }
 }

@@ -2,6 +2,7 @@ using GraphQLBookstore.Models;
 using System.Collections.Generic;
 using System.Linq;
 using GraphQL.Types;
+using System.Threading.Tasks;
 
 namespace GraphQLBookstore.Repositories
 {
@@ -25,6 +26,12 @@ namespace GraphQLBookstore.Repositories
 
         public Author Find(long id) {
             return _context.Authors.Find(id);
+        }
+
+        public async Task<Author> Add(Author author) {
+            _context.Authors.Add(author);
+            await _context.SaveChangesAsync();
+            return author;
         }
     }
 }
