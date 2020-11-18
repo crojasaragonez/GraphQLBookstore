@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GraphQL.Types;
 using System.Threading.Tasks;
+using GraphQLBookstore.GraphQL;
 
 namespace GraphQLBookstore.Repositories
 {
@@ -21,7 +22,7 @@ namespace GraphQLBookstore.Repositories
                 var value = context.GetArgument<string>("name");
                 result = result.Where(a => a.Name.Contains(value));
             }
-            return result;
+            return PaginatedList<Author>.Paginate(result, context);
         }
 
         public Author Find(long id) {

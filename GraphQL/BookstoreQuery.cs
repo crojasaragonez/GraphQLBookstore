@@ -9,7 +9,11 @@ namespace GraphQLBookstore.GraphQL
         public BookstoreQuery(AuthorRepository authorRepository, BookRepository bookRepository)
         {
             Field<ListGraphType<AuthorType>>("authors",
-                                             arguments: new QueryArguments(new QueryArgument<StringGraphType> { Name = "name" }),
+                                             arguments: new QueryArguments(
+                                                 new QueryArgument<StringGraphType> { Name = "name" },
+                                                 new QueryArgument<IntGraphType> { Name = "page", DefaultValue = 1 },
+                                                 new QueryArgument<IntGraphType> { Name = "pageSize", DefaultValue = 12 }
+                                             ),
                                              resolve: context => authorRepository.All(context));
 
             Field<AuthorType>("author",
@@ -21,7 +25,9 @@ namespace GraphQLBookstore.GraphQL
                                                new QueryArgument<StringGraphType> { Name = "name" },
                                                new QueryArgument<StringGraphType> { Name = "description" },
                                                new QueryArgument<FloatGraphType> { Name = "price" },
-                                               new QueryArgument<IntGraphType> { Name = "authorId" }
+                                               new QueryArgument<IntGraphType> { Name = "authorId" },
+                                               new QueryArgument<IntGraphType> { Name = "page", DefaultValue = 1 },
+                                               new QueryArgument<IntGraphType> { Name = "pageSize", DefaultValue = 12 }
                                            ),
                                            resolve: context => bookRepository.All(context));
 

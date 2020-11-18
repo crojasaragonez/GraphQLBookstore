@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using GraphQL.Types;
+using GraphQLBookstore.GraphQL;
 
 namespace GraphQLBookstore.Repositories
 {
@@ -34,7 +35,7 @@ namespace GraphQLBookstore.Repositories
                 var value = context.GetArgument<long>("authorId");
                 result = result.Where(a => a.AuthorId == value);
             }
-            return result;
+            return PaginatedList<Book>.Paginate(result, context);
         }
 
 
