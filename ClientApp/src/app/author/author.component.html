@@ -4,11 +4,13 @@
   </div>
   <div class="card-body">
     <div class="form-row">
-      <div class="form-group col-md-11">
-        <input type="search" name="name" class="form-control" [(ngModel)]="name" autofocus placeholder="Name">
+      <div class="form-group col-md-10">
+        <input type="search" name="name" class="form-control" [(ngModel)]="currentAuthor.name" autofocus placeholder="Name">
       </div>
-      <div class="form-group col-md-1">
-        <button class="btn btn-primary" (click)="filter()">Filter</button>
+      <div class="form-group col-md-2">
+        <button class="btn btn-primary" (click)="filter()" *ngIf="!is_editting">Filter</button>
+        <button class="btn btn-primary" (click)="save()" *ngIf="is_editting">Save</button>
+        <button class="btn btn-danger" (click)="is_editting = false" *ngIf="is_editting">Cancel</button>
       </div>
     </div>
   </div>
@@ -17,11 +19,16 @@
   <tr>
     <th>Id</th>
     <th>Name</th>
-    <th></th>
+    <th>
+      <button class="btn btn-success" (click)="is_editting = true">+</button>
+    </th>
   </tr>
   <tr *ngFor="let author of authors">
     <td>{{author.id}}</td>
     <td>{{author.name}}</td>
-    <td></td>
+    <td>
+      <button class="btn btn-warning mr-2" (click)="edit(author)">Edit</button>
+      <button class="btn btn-danger" (click)="delete(author)">Delete</button>
+    </td>
   </tr>
 </table>
