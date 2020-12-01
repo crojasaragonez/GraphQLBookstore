@@ -10,6 +10,7 @@ using GraphQLBookstore.Repositories;
 using GraphQL;
 using GraphQLBookstore.GraphQL;
 using GraphQL.Server;
+using GraphQL.Server.Transports.WebSockets;
 using GraphQL.Server.Ui.Playground;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 
@@ -31,6 +32,7 @@ namespace GraphQLBookstore
                 opt => opt.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")).UseSnakeCaseNamingConvention()
             );
 
+            services.AddSingleton<IChat, Chat>();
             services.AddScoped<AuthorRepository>();
             services.AddScoped<BookRepository>();
             services.AddScoped<IDependencyResolver>(s => new FuncDependencyResolver(s.GetRequiredService));
@@ -38,7 +40,8 @@ namespace GraphQLBookstore
 
             services.AddGraphQL(o => { o.ExposeExceptions = true;})
                     .AddGraphTypes(ServiceLifetime.Scoped)
-                    .AddDataLoader();
+                    .AddDataLoader()
+                    .AddWebSockets();
 
             services.AddControllersWithViews();
             // In production, the Angular files will be served from this directory
@@ -74,6 +77,8 @@ namespace GraphQLBookstore
             }
 
             app.UseRouting();
+            app.UseWebSockets();
+            app.UseGraphQLWebSockets<BookstoreSchema>("/graphql");
             app.UseGraphQL<BookstoreSchema>();
             app.UseGraphQLPlayground(new GraphQLPlaygroundOptions
             {

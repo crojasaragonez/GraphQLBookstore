@@ -9,6 +9,7 @@ namespace GraphQLBookstore.GraphQL
         {
             Query = resolver.Resolve<BookstoreQuery>();
             Mutation = resolver.Resolve<BookstoreMutation>();
+            Subscription = resolver.Resolve<BookstoreSubscriptions>();
         }
     }
 }

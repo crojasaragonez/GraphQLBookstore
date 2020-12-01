@@ -9,12 +9,28 @@ namespace GraphQLBookstore.GraphQL
     {
         AuthorRepository _authorRepository;
         BookRepository _bookRepository;
-        public BookstoreMutation(AuthorRepository authorRepository, BookRepository bookRepository)
+        IChat _chat;
+        public BookstoreMutation(AuthorRepository authorRepository, BookRepository bookRepository, IChat chat)
         {
             _authorRepository = authorRepository;
             _bookRepository = bookRepository;
+            _chat = chat;
             this.AuthorMutations();
             this.BookMutations();
+            this.ChatMutations();
+        }
+
+        private void ChatMutations(){
+            Field<MessageType>("addMessage",
+                arguments: new QueryArguments(
+                    new QueryArgument<MessageInputType> { Name = "message" }
+                ),
+                resolve: context =>
+                {
+                    var receivedMessage = context.GetArgument<Message>("message");
+                    var message = _chat.AddMessage(receivedMessage);
+                    return message;
+                });
         }
 
         private void AuthorMutations() {

@@ -66,7 +66,7 @@ export class AuthorComponent {
         name: this.currentAuthor.name
       }
     }).valueChanges.subscribe(result => {
-      this.authors = result.data && result.data.authors;
+      this.authors = result.data && result.data['authors'];
       this.loading = result.loading;
       this.error = result.error;
     })
